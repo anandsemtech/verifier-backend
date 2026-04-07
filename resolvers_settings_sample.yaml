@@ -13,11 +13,11 @@ polygon:
     networkFlag: 0b0001_0001
     did: did:polygonid:polygon:main:2q4Q7F7tM1xpwUTgWivb6TgKX3vWirsE3mqymuYjVv
     method: polygonid
-#customBlockchain:
-#  customNetwork:
-#    contractAddress: { replace with state contract }
-#    networkURL: { replace with custom RPC }
-#    chainID: { replace with chain ID }
-#    networkFlag: { replace with network flag, e.g 0b0011_0001 }
-#    did: { replace with verifier's did }
-#    method: iden3
+adi:
+  adiTestnet:
+    contractAddress: "0x1049f3a8e81f91d00E65DB46519778A5d178b37E"
+    networkURL: "https://rpc.ab.testnet.adifoundation.ai"
+    chainID: 99999
+    networkFlag: 249
+    method: "iden3"
+    did: "did:iden3:adi:adiTestnet:2kBvhbFKVfhcukuuT6EFiACacUXeke2dqjLRuJ7ymt"

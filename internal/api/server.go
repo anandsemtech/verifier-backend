@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"strings"
 
 	common2 "github.com/ethereum/go-ethereum/common"
 	"github.com/go-chi/chi/v5"
@@ -235,8 +236,23 @@ func (s *Server) Status(_ context.Context, request StatusRequestObject) (StatusR
 	return nil, nil
 }
 
-func getVerifiablePresentations(jwzToken string) (VerifiablePresentations, error) {
-	token, err := jwz.Parse(jwzToken)
+func getVerifiablePresentations(tokenStr string) (VerifiablePresentations, error) {
+	tokenStr = strings.TrimSpace(tokenStr)
+
+	// Case 1: plain-json authorization response
+	// In this verifier/backend dependency set, protocol.ZeroKnowledgeProofResponse
+	// does not expose VP data, so we cannot safely extract presentations here.
+	// Treat successful plain-json callbacks as valid and return no presentations.
+	if strings.HasPrefix(tokenStr, "{") {
+		var msg protocol.AuthorizationResponseMessage
+		if err := json.Unmarshal([]byte(tokenStr), &msg); err != nil {
+			return nil, err
+		}
+		return VerifiablePresentations{}, nil
+	}
+
+	// Case 2: JWZ compact token
+	token, err := jwz.Parse(tokenStr)
 	if err != nil {
 		return nil, err
 	}
